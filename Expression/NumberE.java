@@ -1,3 +1,6 @@
+package Expression;
+import Expression.Replacement;
+
 import java.util.Objects;
 
 public class NumberE implements Expression {

@@ -1,3 +1,7 @@
+package Expression;
+
+import Expression.Expression;
+
 public class Replacement {
     private IdE toReplaceID;
 

@@ -1,3 +1,7 @@
+package Interpretation;
+
+import Expression.Expression;
+
 public class Interpreter {
     private Parser parser;
     public Interpreter(){

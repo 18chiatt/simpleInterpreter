@@ -1,17 +1,19 @@
+package Expression;
+
 import java.util.Objects;
 
-public class DivisE implements Expression {
+public class PlusE implements Expression {
     private Expression lhs;
     private Expression rhs;
 
-    public DivisE(Expression lhs, Expression rhs) {
+    public PlusE(Expression lhs, Expression rhs) {
         this.lhs = lhs;
         this.rhs = rhs;
     }
 
     @Override
     public double getVal() {
-        return (lhs.getVal() / rhs.getVal());
+        return lhs.getVal() + rhs.getVal();
     }
 
     @Override
@@ -23,17 +25,33 @@ public class DivisE implements Expression {
     public void replace(Replacement replacement) {
         if(lhs.needsReplacing(replacement)){
             this.lhs = replacement.getToReplaceWith();
+        } else {
+            lhs.replace(replacement);
         }
         if(rhs.needsReplacing(replacement)){
             this.rhs = replacement.getToReplaceWith();
+        } else {
+            rhs.replace(replacement);
         }
-        lhs.replace(replacement);
-        rhs.replace(replacement);
+
+
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlusE plusE = (PlusE) o;
+        return Objects.equals(lhs, plusE.lhs) && Objects.equals(rhs, plusE.rhs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lhs, rhs);
+    }
+
     public String toString(){
-        return "( / " + lhs.toString() + " " + rhs.toString() + " )";
+        return "( + " + lhs.toString() + " " + rhs.toString() + " )";
     }
 
     @Override
@@ -45,19 +63,5 @@ public class DivisE implements Expression {
     @Override
     public boolean contains(IdE toCheck) {
         return (lhs.contains(toCheck) || rhs.contains(toCheck));
-
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DivisE divisE = (DivisE) o;
-        return lhs.equals(divisE.lhs) && rhs.equals(divisE.rhs);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(lhs, rhs);
     }
 }

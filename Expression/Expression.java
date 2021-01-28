@@ -1,3 +1,5 @@
+package Expression;
+
 public interface Expression {
     public double getVal();
     public boolean needsReplacing(Replacement replacement);

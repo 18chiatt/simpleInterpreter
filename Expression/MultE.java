@@ -1,3 +1,5 @@
+package Expression;
+
 import java.util.Objects;
 
 public class MultE implements Expression {

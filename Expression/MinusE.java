@@ -1,17 +1,19 @@
+package Expression;
+
 import java.util.Objects;
 
-public class PlusE implements Expression {
+public class MinusE implements Expression {
     private Expression lhs;
     private Expression rhs;
 
-    public PlusE(Expression lhs, Expression rhs) {
+    public MinusE(Expression lhs, Expression rhs) {
         this.lhs = lhs;
         this.rhs = rhs;
     }
 
     @Override
     public double getVal() {
-        return lhs.getVal() + rhs.getVal();
+        return lhs.getVal() - rhs.getVal();
     }
 
     @Override
@@ -20,27 +22,11 @@ public class PlusE implements Expression {
     }
 
     @Override
-    public void replace(Replacement replacement) {
-        if(lhs.needsReplacing(replacement)){
-            this.lhs = replacement.getToReplaceWith();
-        } else {
-            lhs.replace(replacement);
-        }
-        if(rhs.needsReplacing(replacement)){
-            this.rhs = replacement.getToReplaceWith();
-        } else {
-            rhs.replace(replacement);
-        }
-
-
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PlusE plusE = (PlusE) o;
-        return Objects.equals(lhs, plusE.lhs) && Objects.equals(rhs, plusE.rhs);
+        MinusE minusE = (MinusE) o;
+        return Objects.equals(lhs, minusE.lhs) && Objects.equals(rhs, minusE.rhs);
     }
 
     @Override
@@ -48,8 +34,19 @@ public class PlusE implements Expression {
         return Objects.hash(lhs, rhs);
     }
 
+    @Override
+    public void replace(Replacement replacement) {
+        if(lhs.needsReplacing(replacement)){
+            lhs = replacement.getToReplaceWith();
+        }
+        if(rhs.needsReplacing(replacement)){
+            rhs = replacement.getToReplaceWith();
+        }
+        lhs.replace(replacement);
+        rhs.replace(replacement);
+    }
     public String toString(){
-        return "( + " + lhs.toString() + " " + rhs.toString() + " )";
+        return "( - " + lhs.toString() + " " + rhs.toString() + " )";
     }
 
     @Override

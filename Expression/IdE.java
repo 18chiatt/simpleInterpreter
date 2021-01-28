@@ -1,3 +1,5 @@
+package Expression;
+
 import java.util.Objects;
 
 public class IdE implements Expression {
@@ -12,7 +14,7 @@ public class IdE implements Expression {
     String identifier;
     @Override
     public double getVal() {
-        throw new ParseException("un-bound identifier");
+        throw new CalculationException("un-bound identifier");
     }
 
     @Override

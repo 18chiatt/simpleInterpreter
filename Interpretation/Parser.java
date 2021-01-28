@@ -1,10 +1,14 @@
-import javax.swing.*;
-import java.lang.reflect.Array;
+package Interpretation;
+
+import Expression.Expression;
+import Expression.*;
+
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class Parser {
-    private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+    private Pattern decimal = Pattern.compile("-?\\d+(\\.\\d+)?");
+    private Pattern alphabetic = Pattern.compile("^[a-zA-Z]*$");
 
     public Expression parse(String toParse){
         if(toParse == null ||  toParse.length() == 0){
@@ -12,7 +16,9 @@ public class Parser {
         }
 
         List<String> strings = _getItems(toParse);
+        //System.out.println(strings.toString());
         String firstItem = strings.get(0);
+
 
         if(firstItem.equals("+")){
             return _makePlus(strings);
@@ -30,10 +36,9 @@ public class Parser {
         if(firstItem.equals("with")){
             return _makeWith(strings);
         }
-        if(pattern.matcher(firstItem).matches()){
+        if(decimal.matcher(firstItem).matches()){
             return _makeNum(strings);
         }
-        System.out.println("MAKING ID" + strings.get(0));
         return _makeID(strings);
 
 
@@ -65,8 +70,13 @@ public class Parser {
         validateForm(middleBit, "([", "])");
 
         List<String> idAndReplacement = getWithElements(middleBit);
+
         IdE idToReplace = new IdE(idAndReplacement.get(0));
-        System.out.println(idAndReplacement.get(1));
+        if( !alphabetic.matcher(idToReplace.getIdentifier()).matches()){
+            //System.out.println(idToReplace.getIdentifier() + " is non alphabetic");
+            throw new ParseException("Non Alphabetic identifier");
+        }
+        //System.out.println(idAndReplacement.get(1));
         Expression toReplaceWith = parse(idAndReplacement.get(1));
         Expression scope = parse(strings.get(2));
 
@@ -76,8 +86,8 @@ public class Parser {
     private void validateForm(String input, String firstFew, String lastFew) {
 
         int indexInString = 0;
-        for(int i =0; i< firstFew.length(); i++){
-            while(input.charAt(indexInString)!= firstFew.charAt(i)){
+        for(int i =0 ; i < firstFew.length(); i++){
+            while(input.charAt(indexInString) != firstFew.charAt(i)){
                 if(input.charAt(indexInString) != ' '){
                     throw new ParseException("Incorrect ordering");
                 }
@@ -86,9 +96,10 @@ public class Parser {
                     throw new ParseException("Incorrect ordering");
                 }
             }
+            indexInString++;
         }
         indexInString = input.length() -1;
-        for(int i=0; i< lastFew.length(); i++){
+        for(int i=lastFew.length()-1; i> -1; i--){
             while(input.charAt(indexInString)!= lastFew.charAt(i)){
                 if(input.charAt(indexInString) != ' '){
                     throw new ParseException("Incorrect ordering");
@@ -98,6 +109,7 @@ public class Parser {
                 }
                 indexInString--;
             }
+            indexInString--;
         }
     }
 
@@ -174,6 +186,9 @@ public class Parser {
                 strings.add(currItem);
                 startIndex = _findStartOfItem(fullExpression,endIndex+1);
             }
+            if(strings.size() < 3){
+                throw new ParseException("Function call with insuccificnet arguments");
+            }
 
 
 
@@ -227,6 +242,9 @@ public class Parser {
     }
 
     public int _findStartOfItem(String fullExpression, int start){
+        if(start > fullExpression.length() -1){
+            throw new ParseException("Unable to locate start of expression");
+        }
         while(fullExpression.charAt(start)== ' ' || fullExpression.charAt(start) == ')' || fullExpression.charAt(start) == ']'){
             start++;
             if(start == fullExpression.length()){

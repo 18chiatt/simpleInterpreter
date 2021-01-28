@@ -1,3 +1,6 @@
+package Expression;
+import Expression.Replacement;
+
 import java.util.Objects;
 
 public class ReplacementE implements Expression {
@@ -75,7 +78,7 @@ public class ReplacementE implements Expression {
     public void doReplacements() {
         Replacement newReplacement = new Replacement(toReplace,toReplaceWith);
         if(toReplaceWith.contains(toReplace)){
-            throw new ParseException("Cyclic dependency " + toReplace.toString() + " Depends on Expression " + toReplaceWith.toString() + " which contains " + toReplace.toString());
+            throw new ParseException("Cyclic dependency " + toReplace.toString() + " Depends on Expression.Expression " + toReplaceWith.toString() + " which contains " + toReplace.toString());
         }
         if(body.needsReplacing(newReplacement)){
             body = newReplacement.getToReplaceWith();
