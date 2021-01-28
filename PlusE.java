@@ -23,12 +23,16 @@ public class PlusE implements Expression {
     public void replace(Replacement replacement) {
         if(lhs.needsReplacing(replacement)){
             this.lhs = replacement.getToReplaceWith();
+        } else {
+            lhs.replace(replacement);
         }
         if(rhs.needsReplacing(replacement)){
             this.rhs = replacement.getToReplaceWith();
+        } else {
+            rhs.replace(replacement);
         }
-        lhs.replace(replacement);
-        rhs.replace(replacement);
+
+
     }
 
     @Override
@@ -46,5 +50,16 @@ public class PlusE implements Expression {
 
     public String toString(){
         return "( + " + lhs.toString() + " " + rhs.toString() + " )";
+    }
+
+    @Override
+    public void doReplacements() {
+        lhs.doReplacements();
+        rhs.doReplacements();
+    }
+
+    @Override
+    public boolean contains(IdE toCheck) {
+        return (lhs.contains(toCheck) || rhs.contains(toCheck));
     }
 }

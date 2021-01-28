@@ -47,4 +47,15 @@ public class MultE implements Expression {
     public String toString(){
         return "( * " + lhs.toString() + " " + rhs.toString() + " )";
     }
+
+    @Override
+    public void doReplacements() {
+        lhs.doReplacements();
+        rhs.doReplacements();
+    }
+
+    @Override
+    public boolean contains(IdE toCheck) {
+        return (lhs.contains(toCheck) || rhs.contains(toCheck));
+    }
 }

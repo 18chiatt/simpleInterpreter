@@ -37,6 +37,18 @@ public class DivisE implements Expression {
     }
 
     @Override
+    public void doReplacements() {
+        lhs.doReplacements();
+        rhs.doReplacements();
+    }
+
+    @Override
+    public boolean contains(IdE toCheck) {
+        return (lhs.contains(toCheck) || rhs.contains(toCheck));
+
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

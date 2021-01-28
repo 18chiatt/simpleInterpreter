@@ -7,6 +7,9 @@ public class Parser {
     private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 
     public Expression parse(String toParse){
+        if(toParse == null ||  toParse.length() == 0){
+            throw new ParseException("Null or zero length input");
+        }
 
         List<String> strings = _getItems(toParse);
         String firstItem = strings.get(0);
@@ -56,13 +59,46 @@ public class Parser {
             throw new ParseException("incorrect arguments for with operation, expected 3, got " + Integer.toString(strings.size()));
         }
 
+
+
         String middleBit = strings.get(1);
+        validateForm(middleBit, "([", "])");
+
         List<String> idAndReplacement = getWithElements(middleBit);
         IdE idToReplace = new IdE(idAndReplacement.get(0));
+        System.out.println(idAndReplacement.get(1));
         Expression toReplaceWith = parse(idAndReplacement.get(1));
         Expression scope = parse(strings.get(2));
 
         return new ReplacementE(idToReplace,toReplaceWith,scope);
+    }
+
+    private void validateForm(String input, String firstFew, String lastFew) {
+
+        int indexInString = 0;
+        for(int i =0; i< firstFew.length(); i++){
+            while(input.charAt(indexInString)!= firstFew.charAt(i)){
+                if(input.charAt(indexInString) != ' '){
+                    throw new ParseException("Incorrect ordering");
+                }
+                indexInString ++;
+                if(indexInString == firstFew.length()){
+                    throw new ParseException("Incorrect ordering");
+                }
+            }
+        }
+        indexInString = input.length() -1;
+        for(int i=0; i< lastFew.length(); i++){
+            while(input.charAt(indexInString)!= lastFew.charAt(i)){
+                if(input.charAt(indexInString) != ' '){
+                    throw new ParseException("Incorrect ordering");
+                }
+                if(indexInString == 0){
+                    throw new ParseException("Incorrect ordering");
+                }
+                indexInString--;
+            }
+        }
     }
 
     private List<String> getWithElements(String middleBit) {
@@ -183,7 +219,7 @@ public class Parser {
 
         for(int i=start; i< fullExpression.length(); i++){
             char currChar = fullExpression.charAt(i);
-            if(currChar == ' ' || currChar == ')' || currChar == '('){
+            if(currChar == ' ' || currChar == ')' || currChar == '(' || currChar == ']'){
                 return i-1;
             }
         }

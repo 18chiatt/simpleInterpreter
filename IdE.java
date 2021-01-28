@@ -12,7 +12,7 @@ public class IdE implements Expression {
     String identifier;
     @Override
     public double getVal() {
-        return -696969696;
+        throw new ParseException("un-bound identifier");
     }
 
     @Override
@@ -35,11 +35,23 @@ public class IdE implements Expression {
 
     @Override
     public void replace(Replacement replacement) {
-        "".charAt(30);
+        //"".charAt(30);
     }
 
     @Override
     public String toString(){
         return identifier;
     }
+
+    @Override
+    public void doReplacements() {
+        return;
+    }
+
+    @Override
+    public boolean contains(IdE toCheck) {
+        return (identifier.equals(toCheck.identifier));
+
+    }
+
 }

@@ -38,4 +38,15 @@ public class NumberE implements Expression {
     public String toString(){
         return Double.toString(value);
     }
+
+    @Override
+    public void doReplacements() {
+        return;
+    }
+    @Override
+    public boolean contains(IdE toCheck) {
+        return false;
+    }
+
+
 }

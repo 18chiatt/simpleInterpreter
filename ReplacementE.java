@@ -70,4 +70,28 @@ public class ReplacementE implements Expression {
     public String toString(){
         return "( with " + "([ " + toReplace.toString() + " " + toReplaceWith.toString() + " ]) " + body.toString() + " )";
     }
+
+    @Override
+    public void doReplacements() {
+        Replacement newReplacement = new Replacement(toReplace,toReplaceWith);
+        if(toReplaceWith.contains(toReplace)){
+            throw new ParseException("Cyclic dependency " + toReplace.toString() + " Depends on Expression " + toReplaceWith.toString() + " which contains " + toReplace.toString());
+        }
+        if(body.needsReplacing(newReplacement)){
+            body = newReplacement.getToReplaceWith();
+            System.out.println("Replaced!");
+            System.out.println(body.toString());
+        } else {
+            body.replace(newReplacement);
+        }
+        body.doReplacements();
+
+    }
+
+    @Override
+    public boolean contains(IdE toCheck) {
+        return (body.contains(toCheck) || toReplaceWith.contains(toCheck) || toReplace.contains(toCheck));
+    }
+
+
 }
