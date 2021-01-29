@@ -42,6 +42,8 @@ class ParserTest {
         expected = new ReplacementE(new IdE("iden"),new NumberE(10),new IdE("iden"));
         assertEquals(expected,parser.parse(expression));
 
+        //assertEquals(1,5);
+
 
     }
 
@@ -227,7 +229,7 @@ class ParserTest {
     void testParse() {
         String parse = "(+ 3 5)";
         Expression returned = parser.parse(parse);
-        System.out.println(returned.toString());
+        //System.out.println(returned.toString());
         Expression expected = new PlusE(new NumberE(3),new NumberE(5));
         assertEquals(expected,returned);
 
@@ -248,13 +250,13 @@ class ParserTest {
         String exampleExpression = "(a b c)";
         List<String> expected = new ArrayList<>(Arrays.asList("a", "b", "c"));
         Assertions.assertEquals(parser._getItems(exampleExpression),expected);
-        System.out.println(parser._getItems(exampleExpression).toString());
+        //System.out.println(parser._getItems(exampleExpression).toString());
 
         expected = new ArrayList<>(Arrays.asList("a", "(a b c)", "c"));
         String nestedExpression = "(a   (a b c)    c)";
         Assertions.assertEquals(expected,parser._getItems(nestedExpression));
 
-        System.out.println(parser._getItems(nestedExpression).toString());
+        //ystem.out.println(parser._getItems(nestedExpression).toString());
     }
 
     // (+ (/ 3 5) (* 49 34))

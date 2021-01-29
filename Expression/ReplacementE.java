@@ -82,8 +82,8 @@ public class ReplacementE implements Expression {
         }
         if(body.needsReplacing(newReplacement)){
             body = newReplacement.getToReplaceWith();
-            System.out.println("Replaced!");
-            System.out.println(body.toString());
+            //System.out.println("Replaced!");
+            //System.out.println(body.toString());
         } else {
             body.replace(newReplacement);
         }
